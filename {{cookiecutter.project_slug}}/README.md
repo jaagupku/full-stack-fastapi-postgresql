@@ -32,8 +32,6 @@ PGAdmin, PostgreSQL web administration: http://localhost:5050
 
 Flower, administration of Celery tasks: http://localhost:5555
 
-Traefik UI, to see how the routes are being handled by the proxy: http://localhost:8090
-
 **Note**: The first time you start your stack, it might take a minute for it to be ready. While the backend waits for the database to be ready and configures everything. You can check the logs to monitor it.
 
 To check the logs, run:
@@ -430,32 +428,6 @@ If you want, you can also remove the `FRONTEND` environment variables from:
 
 But it would be only to clean them up, leaving them won't really have any effect either way.
 
-## Deployment
-
-You can deploy the stack to a Docker Swarm mode cluster with a main Traefik proxy, set up using the ideas from <a href="https://dockerswarm.rocks" target="_blank">DockerSwarm.rocks</a>, to get automatic HTTPS certificates, etc.
-
-And you can use CI (continuous integration) systems to do it automatically.
-
-But you have to configure a couple things first.
-
-### Traefik network
-
-This stack expects the public Traefik network to be named `traefik-public`, just as in the tutorials in <a href="https://dockerswarm.rocks" class="external-link" target="_blank">DockerSwarm.rocks</a>.
-
-If you need to use a different Traefik public network name, update it in the `docker-compose.yml` files, in the section:
-
-```YAML
-networks:
-  traefik-public:
-    external: true
-```
-
-Change `traefik-public` to the name of the used Traefik network. And then update it in the file `.env`:
-
-```bash
-TRAEFIK_PUBLIC_NETWORK=traefik-public
-```
-
 ### Persisting Docker named volumes
 
 You need to make sure that each service (Docker container) that uses a volume is always deployed to the same Docker "node" in the cluster, that way it will preserve the data. Otherwise, it could be deployed to a different node each time, and each time the volume would be created in that new node before starting the service. As a result, it would look like your service was starting from scratch every time, losing all the previous data.
@@ -606,14 +578,12 @@ TAG=prod FRONTEND_ENV=production bash ./scripts/build-push.sh
 
 * Set these environment variables:
   * `DOMAIN={{cookiecutter.domain_main}}`
-  * `TRAEFIK_TAG={{cookiecutter.traefik_constraint_tag}}`
   * `STACK_NAME={{cookiecutter.docker_swarm_stack_name_main}}`
   * `TAG=prod`
 * Use the provided `scripts/deploy.sh` file with those environment variables:
 
 ```bash
 DOMAIN={{cookiecutter.domain_main}} \
-TRAEFIK_TAG={{cookiecutter.traefik_constraint_tag}} \
 STACK_NAME={{cookiecutter.docker_swarm_stack_name_main}} \
 TAG=prod \
 bash ./scripts/deploy.sh
@@ -747,8 +717,6 @@ PGAdmin: http://localhost:5050
 
 Flower: http://localhost:5555
 
-Traefik UI: http://localhost:8090
-
 ### Development with Docker Toolbox URLs
 
 Development URLs, for local development.
@@ -764,8 +732,6 @@ Automatic Alternative Docs (ReDoc): https://local.dockertoolbox.tiangolo.com/red
 PGAdmin: http://local.dockertoolbox.tiangolo.com:5050
 
 Flower: http://local.dockertoolbox.tiangolo.com:5555
-
-Traefik UI: http://local.dockertoolbox.tiangolo.com:8090
 
 ### Development with a custom IP URLs
 
@@ -783,8 +749,6 @@ PGAdmin: http://dev.{{cookiecutter.domain_main}}:5050
 
 Flower: http://dev.{{cookiecutter.domain_main}}:5555
 
-Traefik UI: http://dev.{{cookiecutter.domain_main}}:8090
-
 ### Development in localhost with a custom domain URLs
 
 Development URLs, for local development.
@@ -800,8 +764,6 @@ Automatic Alternative Docs (ReDoc): https://localhost.tiangolo.com/redoc
 PGAdmin: http://localhost.tiangolo.com:5050
 
 Flower: http://localhost.tiangolo.com:5555
-
-Traefik UI: http://localhost.tiangolo.com:8090
 
 ## Project generation and updating, or re-generating
 
