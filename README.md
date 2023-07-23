@@ -61,8 +61,7 @@ Generate a backend and frontend stack using Python, including interactive API do
     * It's also easy to remove it if you have an API-only app, check the instructions in the generated `README.md`.
 * **PGAdmin** for PostgreSQL database, you can modify it to use PHPMyAdmin and MySQL easily.
 * **Flower** for Celery jobs monitoring.
-* Load balancing between frontend and backend with **Traefik**, so you can have both under the same domain, separated by path, but served by different containers.
-* Traefik integration, including Let's Encrypt **HTTPS** certificates automatic generation.
+* Load balancing between frontend and backend with **Nginx**, so you can have both under the same domain, separated by path, but served by different containers.
 * GitLab **CI** (continuous integration), including frontend and backend testing.
 
 ## How to use it
@@ -113,10 +112,6 @@ The input variables, with their default values (some auto generated) are:
 * `postgres_password`: Postgres database password. Use the method above to generate it. (You could easily modify it to use MySQL, MariaDB, etc).
 * `pgadmin_default_user`: PGAdmin default user, to log-in to the PGAdmin interface.
 * `pgadmin_default_user_password`: PGAdmin default user password. Generate it with the method above.
- 
-* `traefik_constraint_tag`: The tag to be used by the internal Traefik load balancer (for example, to divide requests between backend and frontend) for production. Used to separate this stack from any other stack you might have. This should identify each stack in each environment (production, staging, etc).
-* `traefik_constraint_tag_staging`: The Traefik tag to be used while on staging.
-* `traefik_public_constraint_tag`: The tag that should be used by stack services that should communicate with the public.
 
 * `flower_auth`: Basic HTTP authentication for flower, in the form`user:password`. By default: "`admin:changethis`".
 
@@ -127,11 +122,6 @@ The input variables, with their default values (some auto generated) are:
 * `docker_image_celeryworker`: Docker image for the celery worker. By default, based on your Docker image prefix.
 * `docker_image_frontend`: Docker image for the frontend. By default, based on your Docker image prefix.
 
-## How to deploy
-
-This stack can be adjusted and used with several deployment options that are compatible with Docker Compose, but it is designed to be used in a cluster controlled with pure Docker in Swarm Mode with a Traefik main load balancer proxy handling automatic HTTPS certificates, using the ideas from <a href="https://dockerswarm.rocks" target="_blank">DockerSwarm.rocks</a>.
-
-Please refer to <a href="https://dockerswarm.rocks" target="_blank">DockerSwarm.rocks</a> to see how to deploy such a cluster in 20 minutes.
 
 ## More details
 

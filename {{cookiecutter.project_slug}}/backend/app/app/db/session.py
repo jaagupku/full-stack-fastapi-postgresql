@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 
 from app.core.config import settings
 
-engine = create_async_engine(settings.SQLALCHEMY_DATABASE_URI, pool_pre_ping=True)
+engine = create_async_engine(str(settings.SQLALCHEMY_DATABASE_URI), pool_pre_ping=True)
 async_session = sessionmaker(
     bind=engine,
     class_=AsyncSession,
@@ -11,3 +11,6 @@ async_session = sessionmaker(
     autoflush=False,
     expire_on_commit=False,
 )
+
+def get_session() -> AsyncSession:
+    return async_session.begin()

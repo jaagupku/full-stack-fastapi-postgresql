@@ -2,6 +2,7 @@ import asyncio
 from typing import Dict, Generator
 
 import pytest
+import pytest_asyncio
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -17,24 +18,24 @@ def event_loop():
     yield asyncio.get_event_loop()
 
 
-@pytest.fixture(scope="session")
-async def db() -> Generator:
+@pytest_asyncio.fixture(scope="session", autouse=True)
+async def db() -> AsyncSession:
     async with async_session() as session:
         yield session
 
 
-@pytest.fixture(scope="module")
+@pytest_asyncio.fixture(scope="module", autouse=True)
 async def client() -> Generator:
     async with AsyncClient(app=app, base_url="http://test") as c:
         yield c
 
 
-@pytest.fixture(scope="module")
+@pytest_asyncio.fixture(scope="module")
 async def superuser_token_headers(client: AsyncClient) -> Dict[str, str]:
     return await get_superuser_token_headers(client)
 
 
-@pytest.fixture(scope="module")
+@pytest_asyncio.fixture(scope="module")
 async def normal_user_token_headers(
     client: AsyncClient, db: AsyncSession
 ) -> Dict[str, str]:

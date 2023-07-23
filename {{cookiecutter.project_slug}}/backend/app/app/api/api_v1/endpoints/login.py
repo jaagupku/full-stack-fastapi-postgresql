@@ -23,7 +23,7 @@ router = APIRouter()
 async def login_access_token(
     db: AsyncSession = Depends(deps.get_db),
     form_data: OAuth2PasswordRequestForm = Depends(),
-) -> Any:
+) -> schemas.Token:
     """
     OAuth2 compatible token login, get an access token for future requests
     """
@@ -44,7 +44,7 @@ async def login_access_token(
 
 
 @router.post("/login/test-token", response_model=schemas.User)
-async def test_token(current_user: models.User = Depends(deps.get_current_user)) -> Any:
+async def test_token(current_user: models.User = Depends(deps.get_current_user)) -> schemas.User:
     """
     Test access token
     """
@@ -52,7 +52,7 @@ async def test_token(current_user: models.User = Depends(deps.get_current_user))
 
 
 @router.post("/password-recovery/{email}", response_model=schemas.Msg)
-async def recover_password(email: str, db: AsyncSession = Depends(deps.get_db)) -> Any:
+async def recover_password(email: str, db: AsyncSession = Depends(deps.get_db)) -> schemas.Msg:
     """
     Password Recovery
     """
@@ -75,7 +75,7 @@ async def reset_password(
     token: str = Body(...),
     new_password: str = Body(...),
     db: AsyncSession = Depends(deps.get_db),
-) -> Any:
+) -> schemas.Msg:
     """
     Reset password
     """

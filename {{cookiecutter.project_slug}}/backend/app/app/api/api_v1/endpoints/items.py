@@ -15,7 +15,7 @@ async def read_items(
     skip: int = 0,
     limit: int = 100,
     current_user: models.User = Depends(deps.get_current_active_user),
-) -> Any:
+) -> List[schemas.Item]:
     """
     Retrieve items.
     """
@@ -34,7 +34,7 @@ async def create_item(
     db: AsyncSession = Depends(deps.get_db),
     item_in: schemas.ItemCreate,
     current_user: models.User = Depends(deps.get_current_active_user),
-) -> Any:
+) -> schemas.Item:
     """
     Create new item.
     """
@@ -51,7 +51,7 @@ async def update_item(
     id: int,
     item_in: schemas.ItemUpdate,
     current_user: models.User = Depends(deps.get_current_active_user),
-) -> Any:
+) -> schemas.Item:
     """
     Update an item.
     """
@@ -70,7 +70,7 @@ async def read_item(
     db: AsyncSession = Depends(deps.get_db),
     id: int,
     current_user: models.User = Depends(deps.get_current_active_user),
-) -> Any:
+) -> schemas.Item:
     """
     Get item by ID.
     """
@@ -88,7 +88,7 @@ async def delete_item(
     db: AsyncSession = Depends(deps.get_db),
     id: int,
     current_user: models.User = Depends(deps.get_current_active_user),
-) -> Any:
+) -> schemas.Item:
     """
     Delete an item.
     """
